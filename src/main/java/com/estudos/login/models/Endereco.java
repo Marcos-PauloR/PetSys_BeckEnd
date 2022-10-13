@@ -26,7 +26,7 @@ public class Endereco implements Serializable {
     private String cep;
 
     @JsonIgnore
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.REFRESH)
     @JoinColumn(name = "cliente_id")
     private Cliente cliente;
 
@@ -34,5 +34,16 @@ public class Endereco implements Serializable {
     @ManyToOne
     @JoinColumn(name = "cidade_id")
     private Cidade cidade;
+
+    /*public Endereco(Integer id, String logadouro, String numero, String complemento, String bairro, String cep, Cliente cliente, Cidade cidade) {
+        this.id = id;
+        this.logadouro = logadouro;
+        this.numero = numero;
+        this.complemento = complemento;
+        this.bairro = bairro;
+        this.cep = cep;
+        this.cliente=cliente;
+        this.cidade=cidade;
+    }*/
 
 }

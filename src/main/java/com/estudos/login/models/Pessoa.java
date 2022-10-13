@@ -5,10 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.util.Date;
 
 @Entity
@@ -25,5 +22,10 @@ public class Pessoa {
     private String email;
     private Date dataNascimento;
 
+    @OneToOne(optional = false)
+    private Pessoa pessoa;
+
+    @OneToOne(optional = false)
+    private Funcionario funcionario;
 
 }
