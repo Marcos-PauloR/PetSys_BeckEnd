@@ -2,6 +2,7 @@ package com.estudos.login.Controller;
 
 
 import com.estudos.login.Service.FuncionarioService;
+import com.estudos.login.models.Cliente;
 import com.estudos.login.models.Funcionario;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -39,5 +40,11 @@ public class FuncionarioController {
         return ResponseEntity.noContent().build();
     }
 
+    @RequestMapping(value = "/insere", method = RequestMethod.POST)
+    public  ResponseEntity<Void> insere(@RequestBody Funcionario func){
+        Funcionario funcionario = funcionarioService.saveFuncionario(func);
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(funcionario.getId()).toUri();
+        return ResponseEntity.created(uri).build();
+    }
 
 }

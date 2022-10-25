@@ -25,14 +25,14 @@ public class FuncionarioService {
 
 
     public Funcionario saveFuncionario(Funcionario funcionario){
-        //log.info("Salvando novo Funcionario :{}", funcionario.getUser().getNome());
+        log.info("Salvando novo Funcionario :{}", funcionario.getUser().getNome());
         userRepository.save(funcionario.getUser());
         return repository.save(funcionario);
     }
 
     public Funcionario getFuncionario(Long id) {
         Optional<Funcionario> funcionario = repository.findById(id);
-        //log.info("Busca Funcionario: {}", funcionario.get().getUser().getNome());
+        log.info("Busca Funcionario: {}", funcionario.get().getUser().getNome());
         return funcionario.orElseThrow();
     }
 
