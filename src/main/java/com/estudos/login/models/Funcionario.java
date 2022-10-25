@@ -22,10 +22,9 @@ public class Funcionario {
     private Date dataCadastro;
 
 
-    @OneToOne
-    private Pessoa pessoa;
 
     @OneToOne
+    @JoinColumn(name = "user_id")
     private User user;
 
 }

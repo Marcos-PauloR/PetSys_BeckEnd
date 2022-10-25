@@ -1,8 +1,6 @@
 package com.estudos.login.models;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -10,6 +8,8 @@ import java.util.Collection;
 
 @Entity
 @Data
+@Setter
+@Getter
 @NoArgsConstructor
 @AllArgsConstructor
 public class User {
@@ -23,8 +23,7 @@ public class User {
     @ManyToMany(fetch = FetchType.EAGER)
     private Collection<Role> roles = new ArrayList<>();
 
-    @OneToOne
-    private Funcionario funcionario;
+
 
 
 }
