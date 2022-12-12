@@ -3,13 +3,15 @@ package com.estudos.login.models;
 import lombok.*;
 
 import javax.persistence.*;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.util.ArrayList;
 import java.util.Collection;
 
-@Entity
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+@Entity(name="user")
 @Data
-@Setter
-@Getter
 @NoArgsConstructor
 @AllArgsConstructor
 public class User {
@@ -17,13 +19,15 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    private String nome;
+
+    @Column(unique = true)
     private String username;
     private String password;
-    @ManyToMany(fetch = FetchType.EAGER)
+
+    @ManyToMany(fetch = FetchType.LAZY) 
     private Collection<Role> roles = new ArrayList<>();
 
-
-
-
+    @JsonIgnore
+    @OneToOne(mappedBy = "user", cascade=CascadeType.PERSIST) 
+    private Funcionario funcionario;
 }

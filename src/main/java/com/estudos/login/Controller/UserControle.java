@@ -4,15 +4,16 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
-import com.estudos.login.Service.UserService;
+import com.estudos.login.Service.UserServiceImpl;
 import com.estudos.login.models.User;
 import com.estudos.login.models.Role;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -33,24 +34,24 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 @RequiredArgsConstructor
 @RequestMapping("/api")
 public class UserControle {
-    private final UserService userService;
+    private final UserServiceImpl userService;
 
-    @PreAuthorize("hasAuthority('ROLE_MANAGER')")
+    
     @GetMapping("/users")
     public ResponseEntity<List<User>> getUsers(){
         return ResponseEntity.ok().body(userService.getUsers());
     }
 
     @PostMapping("/users/save")
-    public ResponseEntity<User> saveUser(@RequestBody User user){
+    public ResponseEntity<User> saveUser(@RequestBody User user) throws Exception{
         URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("api/user/save").toUriString());
         return ResponseEntity.created(uri).body(userService.saveUser(user));
     }
 
-    @PostMapping("/role/save")
-    public ResponseEntity<Role> saveRole(@RequestBody Role role){
-        URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("api/role/save").toUriString());
-        return ResponseEntity.created(uri).body(userService.saveRole(role));
+    @PutMapping("/users/update")
+    public ResponseEntity<User> updateUser(@RequestBody User user) throws Exception{
+        userService.updateUser(user);
+        return ResponseEntity.status(HttpStatus.valueOf(204)).build();
     }
 
 
@@ -86,7 +87,7 @@ public class UserControle {
                     log.error("Erro no login em: {}", exception.getMessage());
                     response.setHeader("error", exception.getMessage());
                     response.setStatus(FORBIDDEN.value());
-                    //response.sendError(FORBIDDEN.value());
+                    response.sendError(FORBIDDEN.value());
                     Map<String, String> error = new HashMap<>();
                     error.put("error_message",exception.getMessage());
                     response.setContentType(APPLICATION_JSON_VALUE);

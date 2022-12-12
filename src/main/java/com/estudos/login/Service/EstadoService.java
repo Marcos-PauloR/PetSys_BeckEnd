@@ -17,8 +17,8 @@ public class EstadoService {
         return repository.findAll();
     }
 
-    public Estado getEstado(String estado){
+    /*public Estado getEstado(String estado){
         return  repository.findByNome(estado);
-    }
+    }*/
 
 }

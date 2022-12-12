@@ -16,9 +16,12 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+
+import java.lang.StackWalker.Option;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 
 
 @Service
@@ -26,25 +29,32 @@ import java.util.List;
 @Transactional
 @Slf4j
 public class UserServiceImpl  implements UserService, UserDetailsService {
-
-    private final UserRepository userRepo;
-    private final RoleRepository roleRepo;
+    @Autowired
+    private UserRepository userRepo;
+    @Autowired
+    private RoleRepository roleRepo;
 
     @Autowired
     private final FuncionarioRepository repository;
 
+    @Autowired
     private final PasswordEncoder passwordEncoder;
+
     @Override
-    public User saveUser(User user) {
-        log.info("Salvando novo Usuario :{}", user.getNome());
+    public User saveUser(User user) throws Exception {
+        log.info("Salvando novo Usuario :{}", user.getUsername());
         //repository.findById(user.getFuncionario().getId());
+        user.setRoles(null);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         return userRepo.save(user);
     }
 
     @Override
-    public Role saveRole(Role role) {
+    public Role saveRole(Role role) throws Exception{
         log.info("Salvando nova Role: {}", role.getName());
+        if(roleRepo.findByName(role.getName()) != null){
+            throw new Exception("Role Já Existente");
+        }
         return roleRepo.save(role);
     }
 
@@ -56,10 +66,21 @@ public class UserServiceImpl  implements UserService, UserDetailsService {
         user.getRoles().add(role);
     }
 
+    public void deleteById(Long id){
+        User user = getUserById(id);
+        userRepo.delete(user);
+    }
+
     @Override
     public User getUser(String username) {
         log.info("Busca usuario: {}", username);
         return userRepo.findByUsername(username);
+    }
+
+    public User getUserById(Long userId) {
+        log.info("Busca usuario: {}",userRepo.findById(userId).get().getUsername());
+        Optional<User> user = userRepo.findById(userId);
+        return user.orElseThrow();
     }
 
     @Override
@@ -68,19 +89,32 @@ public class UserServiceImpl  implements UserService, UserDetailsService {
         return userRepo.findAll();
     }
 
+    public User updateUser(User newUser){
+        User oldUser = getUserById(newUser.getId());
+        oldUser.setUsername(newUser.getUsername());
+        if(newUser.getPassword() !=null){
+            oldUser.setPassword(passwordEncoder.encode( newUser.getPassword()));
+        }
+        oldUser.setRoles(newUser.getRoles());
+        return userRepo.save(oldUser);
+    }
+
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userRepo.findByUsername(username);
+        if(username == ""){
+            log.error("Usuario vazio: "+username);
+        }
         if(user == null ){
             log.error("Usuario não encontrado");
             throw new UsernameNotFoundException("Usuario no encontrado");
-        }else {
+        }
             log.info("Usuario encontrado: "+ user.getUsername());
             log.info("senha: {}", user.getPassword());
-        }
-        Collection<SimpleGrantedAuthority> roles = new ArrayList<>();
-        user.getRoles().forEach( role -> roles.add(new SimpleGrantedAuthority(role.getName())));
-        return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), roles);
+            Collection<SimpleGrantedAuthority> roles = new ArrayList<>();
+            user.getRoles().forEach( role -> roles.add(new SimpleGrantedAuthority(role.getName())));
+            return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), roles);
+        
     }
 
 }
