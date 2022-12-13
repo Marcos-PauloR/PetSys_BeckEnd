@@ -1,6 +1,5 @@
 package com.estudos.login.Service;
 
-import com.estudos.login.Repository.FuncionarioRepository;
 import com.estudos.login.Repository.RoleRepository;
 import com.estudos.login.Repository.UserRepository;
 import com.estudos.login.models.User;
@@ -17,7 +16,6 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 
-import java.lang.StackWalker.Option;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -33,9 +31,6 @@ public class UserServiceImpl  implements UserService, UserDetailsService {
     private UserRepository userRepo;
     @Autowired
     private RoleRepository roleRepo;
-
-    @Autowired
-    private final FuncionarioRepository repository;
 
     @Autowired
     private final PasswordEncoder passwordEncoder;

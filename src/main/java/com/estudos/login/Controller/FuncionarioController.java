@@ -57,8 +57,7 @@ public class FuncionarioController {
 
     @RequestMapping(value = "/updateFuncionario", method = RequestMethod.PUT)
     public  ResponseEntity<Void> update(@RequestBody Funcionario func){
-        Funcionario funcionario = funcionarioService.updateFunc(func);
-        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(funcionario.getId()).toUri();
+        funcionarioService.updateFunc(func);
         return ResponseEntity.status(HttpStatus.valueOf(204)).build();
     }
 

@@ -1,7 +1,6 @@
 package com.estudos.login.Service;
 
 import com.estudos.login.Repository.PessoaRepository;
-import com.estudos.login.models.Funcionario;
 import com.estudos.login.models.Pessoa;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

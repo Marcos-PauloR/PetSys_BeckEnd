@@ -1,13 +1,11 @@
 package com.estudos.login.Service;
 
 import com.estudos.login.Repository.FuncionarioRepository;
-import com.estudos.login.Repository.UserRepository;
 import com.estudos.login.models.Funcionario;
 import com.estudos.login.models.User;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

@@ -1,8 +1,5 @@
 package com.estudos.login;
 
-import com.estudos.login.Repository.*;
-import com.estudos.login.Service.UserServiceImpl;
-import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
