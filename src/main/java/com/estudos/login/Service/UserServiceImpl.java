@@ -43,7 +43,6 @@ public class UserServiceImpl  implements UserService, UserDetailsService {
     @Override
     public User saveUser(User user) throws Exception {
         log.info("Salvando novo Usuario :{}", user.getUsername());
-        //repository.findById(user.getFuncionario().getId());
         user.setRoles(null);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         return userRepo.save(user);
